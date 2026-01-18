@@ -1,9 +1,4 @@
 # OI
-```CPP
-#include <iostream>
-
-int mian() {
-	std::cout << "Hello World";
-	return 0;
-}
+```py
+print('Hello World')
 ```
