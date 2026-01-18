@@ -1,0 +1,87 @@
+
+---
+# $知识链接:$
+## $[[公共前缀]]$#
+---
+
+# $定义$:
+## $字典树是按照前缀存储字符串的数据结构$
+
+---
+
+# $例如，一颗存储she,he的字典树形如下方$
+```mermaid
+	graph LR
+		a((root))
+		b((1))
+		c((2))
+		d((3))
+		style d fill: #4CAF50
+		e((4))
+		h((5))
+		style h fill: #4CAF50
+		a -->|s|b
+		b -->|h|c
+		c -->|e|d
+		a -->|h|e
+		e -->|e|h
+```
+
+## $先插入she$
+
+---
+# $节点数$
+## $设有n个字符串，则节点数为n*|s|$
+
+---
+# $存储$
+## $用一个二维数组f来存，f[i][j]=node表示节点i是否可以通过字符j转移到节点node$
+
+---
+# $应用$
+## $查找字符串是否在字典树中$
+### $1.用int\ p表示节点，根节点为0，迭代遍历模式串$
+### $2.遍历顺利结束不一定正确，因为模式串长度可能小于字母长度，所以插入完一个字符还要把该字符结尾节点标记$
+
+### 代码实现
+```cpp
+#include <iostream>
+#include <string>
+#include <vector>
+
+int main() {
+	int n, node = 0;
+	std::string s;
+	std::vector <std::vector <int>> f (n * 10, std::vector <int>(26, 0));//若字符长度均不超过10，且仅有小写
+	std::vector <bool> isEnd (n * 10, false);
+	while(n--) {
+		std::cin >> s;
+		int p = 0;
+		for (char c : s) {
+			int v = c - 'a';
+			if (!f[p][v])
+				f[p][v] = ++node;
+			p = f[p][v];
+		}
+		isEnd[p] = true;
+	}
+	int q;
+	std::string t;
+	while (q--) {
+		std::cin >> t;
+		int p = 0, flag = 1;
+		for (char c : t) {
+			int v = c - 'a';
+			if (!f[p][v]) {
+				flag = false;
+				break;
+			}
+			p = f[p][v];
+		}
+		std::cout << (flag && isEnd[p] ? "Yes" : "No") << '\n';
+	}
+	return 0;
+}
+```
+
+---
